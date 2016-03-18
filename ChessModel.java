@@ -1,3 +1,5 @@
+package chess;
+
 /**
  * Created by baileyfreund on 3/16/16.
  */
@@ -31,16 +33,28 @@ public class ChessModel implements IChessModel {
     }
 
     public int numRows() {
-        // complete this
+    	return 8;
     }
 
     public int numColumns() {
-        // complete this
+      return 8;
     }
 
     public IChessPiece pieceAt(int row, int column) {
         // complete this
+    	
+    	return board[row][column];
     }
+    
+    public boolean containsPiece(int row, int column){
+    	
+    	if(board[row][column].type() == null)
+    		return false;
+    	else
+    		return true;
+    	
+    }
+    
 
     // add other public or helper methods as needed
 }
