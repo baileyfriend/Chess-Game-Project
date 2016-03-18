@@ -1,25 +1,45 @@
 package chess;
 
 public class Knight extends ChessPiece {
-	
-	public Knight(Player player) {
+
+
+	public Knight(Player player){
 		super(player);
+		//super(isValidMove()); -- want to call the super's isValidMove to check for the conditions set in superClass ChessPiece - not exactly sure how to do that yet
 	}
 
-	public String type() {
+	public String type(){
 		return "knight";
 	}
 
-	public boolean isValidMove(Move move, IChessPiece[][] board) {
 
-		if (move.fromColumn != move.toColumn &&
-				move.fromRow == move.toRow)
+
+	public boolean isValidMove(Move move, IChessPiece[][] board){
+
+		if(move.toRow == move.fromRow -2 && move.toColumn == move.fromColumn-1)
 			return true;
-		else if (move.fromColumn == move.toColumn &&
-				move.fromRow != move.toRow)
+		if(move.toRow == move.fromRow -1 && move.toColumn == move.fromColumn-2)
 			return true;
+		if(move.toRow == move.fromRow -2 && move.toColumn == move.fromColumn+1)
+			return true;
+
+		if(move.toRow == move.fromRow -1 && move.toColumn == move.fromColumn+2)
+			return true;
+
+		if(move.toRow == move.fromRow +1 && move.toColumn == move.fromColumn-2)
+			return true;
+
+		if(move.toRow == move.fromRow +2 && move.toColumn == move.fromColumn-1)
+			return true;
+
+		if(move.toRow == move.fromRow +1 && move.toColumn == move.fromColumn+2)
+			return true;
+		if(move.toRow == move.fromRow +2 && move.toColumn == move.fromColumn+1)
+			return true;
+
 		else
 			return false;
-		
+
 	}
 }
+
