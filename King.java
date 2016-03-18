@@ -1,5 +1,29 @@
-/**
- * Created by baileyfreund on 3/16/16.
- */
+package chess;
+
 public class King extends ChessPiece {
+	
+	private boolean moved;
+
+	public King(Player player) {
+		super(player);
+		moved = false;
+	}
+
+	public String type() {
+		return "king";
+	}
+
+	public void setMoved(boolean val) {
+		moved = val;
+	}
+
+	public boolean isValidMove(Move move, IChessPiece[][] board) {
+
+		if (move.toColumn - move.fromColumn <= 1 && move.toRow - 
+				move.fromRow >= -1)
+			return true;
+		else
+			return false;
+		
+	}
 }
