@@ -1,3 +1,5 @@
+package chess;
+
 /**
  * Created by Nathan Hull and Bailey Freund on 3/16/16.
  */
