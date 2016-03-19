@@ -9,8 +9,35 @@ public class ChessModel implements IChessModel {
     // declare other instance variables as needed
 
     public ChessModel() {
-        // complete this
+    	    	board = new IChessPiece[8][8];
     	
+    	//create and place pawns
+        for(int x = 0; x < 8; x++){
+        	board[1][x] = new Pawn(Player.BLACK);
+        }
+        for(int x = 0; x < 8; x++){
+        	board[6][x] = new Pawn(Player.WHITE);
+        }
+        
+        board[0][0] = new Rook(Player.BLACK);
+        board[0][7] = new Rook(Player.BLACK);
+        board[7][0] = new Rook(Player.WHITE);
+        board[7][7] = new Rook(Player.WHITE);
+        
+        board[0][1] = new Bishop(Player.BLACK);
+        board[0][6] = new Bishop(Player.BLACK);
+        board[7][1] = new Bishop(Player.WHITE);
+        board[7][6] = new Bishop(Player.WHITE);
+        
+        board[0][2] = new Knight(Player.BLACK);
+        board[0][5] = new Knight(Player.BLACK);
+        board[7][2] = new Knight(Player.WHITE);
+        board[7][5] = new Knight(Player.WHITE);
+        
+        board[0][3] = new King(Player.BLACK);
+        board[0][4] = new Queen(Player.BLACK);
+        board[7][3] = new King(Player.WHITE);
+        board[7][4] = new Queen(Player.WHITE);
     	
     }
 
