@@ -20,11 +20,15 @@ public class Rook extends ChessPiece {
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
 		if(super.isValidMove(move, board)){
 		if (move.fromColumn != move.toColumn &&
-				move.fromRow == move.toRow)
+				move.fromRow == move.toRow){
+			moved = true;
 			return true;
+		}
 		else if (move.fromColumn == move.toColumn &&
-				move.fromRow != move.toRow)
+				move.fromRow != move.toRow){
+			moved = true;
 			return true;
+		}
 		else
 			return false;
 		}
