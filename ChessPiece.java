@@ -24,9 +24,9 @@ public abstract class ChessPiece implements IChessPiece {
     }
     
     public boolean isPieceBetween(Move move, IChessPiece[][] board){
-    	
-    	for(int i=0; i<move.toRow; i++){
-    		for(int j=0; j<move.toColumn; j++){
+
+    	for(int i=move.fromRow; i<move.toRow; i++){
+    		for(int j=move.fromColumn; j<move.toColumn; j++){
     			if(board[i][j].type()!=null)
     				return true;
     		}
@@ -65,9 +65,9 @@ public abstract class ChessPiece implements IChessPiece {
             return false;
         
         //if there is a piece between the the move.from and the move.to then return false
-        else if(isPieceBetween(move, board) == true 
-        		&& board[move.fromRow][move.fromColumn].type() != "knight") 
-            return false;
+//        else if(isPieceBetween(move, board) == true 
+//        		&& board[move.fromRow][move.fromColumn].type() != "knight") 
+//            return false;
         
         //checks if chesspiece is owned by the current player or the next player
         try{
