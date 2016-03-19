@@ -70,12 +70,16 @@ public abstract class ChessPiece implements IChessPiece {
             return false;
         
         //checks if chesspiece is owned by the current player or the next player
-        else if(board[move.toRow][move.toColumn].player() == this.owner)//player() != owner.next())
+        try{
+        if (board[move.toRow][move.toColumn].player() == this.owner)//player() != owner.next())
             return false;
+        }
+        catch(Exception NullPointerException){
+        	return true;
+        }
         
         //if none of the above are true, then the move must be valid.
-        else
-            return true;
+        return true;
     }
 }
 
