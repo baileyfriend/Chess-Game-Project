@@ -20,33 +20,47 @@ public class Pawn extends ChessPiece {
 		if(super.isValidMove(move, board)){
 		if (this.player() == Player.BLACK){
 			
-			if (move.fromColumn + 2 == move.toColumn && 
-					move.fromRow == move.toRow && !moved)
+			if (move.fromRow + 2 == move.toRow && 
+					move.fromColumn == move.toColumn && !moved){
+				moved = true;
 				return true;
-			else if (move.fromColumn + 1 == move.toColumn &&
-					move.fromRow == move.toRow)
+			}
+			else if (move.fromRow + 1 == move.toRow &&
+					move.fromColumn == move.toColumn){
+				moved = true;
 				return true;
-			else if (move.fromColumn + 1 == move.toColumn &&
-					move.fromRow + 1 == move.toRow || move.fromRow - 1
-					== move.toRow && board[move.toRow][move.toColumn]
-							.player() == Player.WHITE)
+			}
+			else if (move.fromRow + 1 == move.toRow &&
+					(move.fromColumn + 1 == move.toColumn
+					|| move.fromColumn - 1 == move.toColumn) &&
+					board[move.toRow][move.toColumn].player()
+					== Player.WHITE){
+				moved = true;
 				return true;
+			}
 			else
 				return false;
 			
 		}else if (this.player() == Player.WHITE){
 			
-			if (move.fromColumn - 2 == move.toColumn && 
-					move.fromRow == move.toRow && !moved)
+			if (move.fromRow - 2 == move.toRow && 
+					move.fromColumn == move.toColumn && !moved){
+				moved = true;
 				return true;
-			else if (move.fromColumn - 1 == move.toColumn &&
-					move.fromRow == move.toRow)
+			}
+			else if (move.fromRow - 1 == move.toRow &&
+					move.fromColumn == move.toColumn){
+				moved = true;
 				return true;
-			else if (move.fromColumn - 1 == move.toColumn &&
-					move.fromRow + 1 == move.toRow || move.fromRow - 1
-					== move.toRow && board[move.toRow][move.toColumn]
-							.player() == Player.BLACK)
+			}
+			else if (move.fromRow - 1 == move.toRow &&
+					(move.fromColumn + 1 == move.toColumn
+					|| move.fromColumn - 1 == move.toColumn) &&
+					board[move.toRow][move.toColumn].player()
+					== Player.BLACK){
+				moved = true;
 				return true;
+			}
 			else
 				return false;
 			
