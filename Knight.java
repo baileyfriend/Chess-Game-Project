@@ -15,11 +15,15 @@ public class Knight extends ChessPiece {
 
 
 	public boolean isValidMove(Move move, IChessPiece[][] board){
+		
+		if(super.isValidMove(move, board)){
 
 		if(move.toRow == move.fromRow -2 && move.toColumn == move.fromColumn-1)
 			return true;
+		
 		if(move.toRow == move.fromRow -1 && move.toColumn == move.fromColumn-2)
 			return true;
+		
 		if(move.toRow == move.fromRow -2 && move.toColumn == move.fromColumn+1)
 			return true;
 
@@ -34,11 +38,15 @@ public class Knight extends ChessPiece {
 
 		if(move.toRow == move.fromRow +1 && move.toColumn == move.fromColumn+2)
 			return true;
+		
 		if(move.toRow == move.fromRow +2 && move.toColumn == move.fromColumn+1)
 			return true;
-
+		
+		
 		else
 			return false;
+		}
+		return false;
 
 	}
 }

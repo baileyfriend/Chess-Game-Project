@@ -17,7 +17,7 @@ public class Pawn extends ChessPiece {
 	}
 	
 	public boolean isValidMove(Move move, IChessPiece[][] board){
-		
+		if(super.isValidMove(move, board)){
 		if (this.player() == Player.BLACK){
 			
 			if (move.fromColumn + 2 == move.toColumn && 
@@ -51,7 +51,7 @@ public class Pawn extends ChessPiece {
 				return false;
 			
 		}
-		
+		}
 		return false;
 	}
 }

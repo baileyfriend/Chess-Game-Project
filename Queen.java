@@ -19,7 +19,7 @@ public class Queen extends ChessPiece {
 		 int colDiff = Math.abs(move.fromColumn - move.toColumn);//checks what the absolute value of the difference between the fromcol to the tocol is
 		    
 		
-		
+		 if(super.isValidMove(move, board)){
 		
 		if (move.fromColumn != move.toColumn && //checks if queen is moving within row (straight)
 				move.fromRow == move.toRow)
@@ -31,7 +31,8 @@ public class Queen extends ChessPiece {
 	        return true;
 			else
 			return false;
-
+		 }
+		 return false;
 	}
 }
 

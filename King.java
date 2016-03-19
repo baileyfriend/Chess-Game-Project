@@ -18,12 +18,13 @@ public class King extends ChessPiece {
 	}
 
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
-
+		if(super.isValidMove(move, board)){
 		if (move.toColumn - move.fromColumn <= 1 && move.toRow - 
 				move.fromRow >= -1)
 			return true;
 		else
 			return false;
-		
+		}
+		return false;
 	}
 }

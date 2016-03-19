@@ -30,6 +30,8 @@ public class ChessModel implements IChessModel {
         // complete this
     	//what exactly is this method doing..? Is this referring to the ChessPiece isValidMove() method?
     	//call the specific piece which calls the super class
+    	IChessPiece piece = board[move.fromRow][move.fromColumn];
+    	return piece.isValidMove(move, board);
     }
 
     public void move(Move move) {
@@ -42,9 +44,7 @@ public class ChessModel implements IChessModel {
         return false;
     }
 
-    public Player currentPlayer() {
-        // complete this
-    	//Player theCurrentPlayer = player.next();
+    public Player currentPlayer() { 
     	return player;
     	
     }
