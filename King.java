@@ -16,6 +16,10 @@ public class King extends ChessPiece {
 	public void setMoved(boolean val) {
 		moved = val;
 	}
+	
+	public boolean getMoved(){
+		return moved;
+	}
 
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
 		if(super.isValidMove(move, board)){
@@ -24,6 +28,12 @@ public class King extends ChessPiece {
 			moved = true;
 			return true;
 		}
+		else if(board[move.toRow][move.toColumn].type() == "rook" && moved != true){
+			return true;
+		}
+		
+			
+		
 		else
 			return false;
 		}

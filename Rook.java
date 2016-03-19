@@ -16,6 +16,10 @@ public class Rook extends ChessPiece {
 	public void setMoved(boolean val) {
 		moved = val;
 	}
+	
+	public boolean getMoved(){
+		return moved;
+	}
 
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
 		if(super.isValidMove(move, board)){
@@ -27,6 +31,9 @@ public class Rook extends ChessPiece {
 		else if (move.fromColumn == move.toColumn &&
 				move.fromRow != move.toRow){
 			moved = true;
+			return true;
+		}
+		else if(board[move.toRow][move.toColumn].type() == "king" && moved != true){
 			return true;
 		}
 		else

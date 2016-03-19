@@ -16,7 +16,7 @@ public class Bishop extends ChessPiece {
 
 	public boolean isValidMove(Move move, IChessPiece[][] board){
 		if(super.isValidMove(move, board)){ 
-		int rowDiff = Math.abs(move.fromRow - move.toRow); //checks what the absolute value of the difference between the fromrow to the torow is
+		 int rowDiff = Math.abs(move.fromRow - move.toRow); //checks what the absolute value of the difference between the fromrow to the torow is
 		 int colDiff = Math.abs(move.fromColumn - move.toColumn);//checks what the absolute value of the difference between the fromcol to the tocol is
 		    
 		    
