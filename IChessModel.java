@@ -1,6 +1,5 @@
-/**
- * Created by baileyfreund on 3/16/16.
- */
+package chess;
+
 public interface IChessModel {
 
     /**
