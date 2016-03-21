@@ -24,7 +24,7 @@ public class Pawn extends ChessPiece {
 				if(board[move.toRow][move.toColumn].type() == null){
 					
 				}
-				else if (move.fromRow + 1 == move.toRow &&
+				else if (move.fromRow - 1 == move.toRow &&
 						(move.fromColumn - 1 == move.toColumn
 						|| move.fromColumn + 1 == move.toColumn) &&
 						board[move.toRow][move.toColumn].player()
