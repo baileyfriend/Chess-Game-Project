@@ -20,52 +20,66 @@ public class Pawn extends ChessPiece {
 		if(super.isValidMove(move, board)){
 		if (this.player() == Player.BLACK){
 			
-			if (move.fromRow + 2 == move.toRow && 
-					move.fromColumn == move.toColumn && !moved){
-				moved = true;
-				return true;
+			try{
+				if(board[move.toRow][move.toColumn].type() == null){
+					
+				}
+				else if (move.fromRow + 1 == move.toRow &&
+						(move.fromColumn - 1 == move.toColumn
+						|| move.fromColumn + 1 == move.toColumn) &&
+						board[move.toRow][move.toColumn].player()
+						== Player.WHITE){
+					moved = true;
+					return true;
+				}
 			}
-			else if (move.fromRow + 1 == move.toRow &&
-					move.fromColumn == move.toColumn){
-				moved = true;
-				return true;
+			catch(Exception NullPointerException){
+				if (move.fromRow + 2 == move.toRow && 
+						move.fromColumn == move.toColumn && !moved){
+					moved = true;
+					return true;
+				}
+				else if (move.fromRow + 1 == move.toRow &&
+						move.fromColumn == move.toColumn){
+					moved = true;
+					return true;
+				}
+			
 			}
-			else if (move.fromRow + 1 == move.toRow &&
-					(move.fromColumn + 1 == move.toColumn
-					|| move.fromColumn - 1 == move.toColumn) &&
-					board[move.toRow][move.toColumn].player()
-					== Player.WHITE){
-				moved = true;
-				return true;
-			}
-			else
-				return false;
 			
 		}else if (this.player() == Player.WHITE){
 			
-			if (move.fromRow - 2 == move.toRow && 
-					move.fromColumn == move.toColumn && !moved){
-				moved = true;
-				return true;
+			try{
+				if(board[move.toRow][move.toColumn].type() == null){
+					
+				}
+				else if (move.fromRow - 1 == move.toRow &&
+						(move.fromColumn + 1 == move.toColumn
+						|| move.fromColumn - 1 == move.toColumn) &&
+						board[move.toRow][move.toColumn].player()
+						== Player.BLACK){
+					moved = true;
+					return true;
+				}
 			}
-			else if (move.fromRow - 1 == move.toRow &&
-					move.fromColumn == move.toColumn){
-				moved = true;
-				return true;
+			catch(Exception NullPointerException){
+				if (move.fromRow - 2 == move.toRow && 
+						move.fromColumn == move.toColumn && !moved){
+					moved = true;
+					return true;
+				}
+				else if (move.fromRow - 1 == move.toRow &&
+						move.fromColumn == move.toColumn){
+					moved = true;
+					return true;
+				}
+			
 			}
-			else if (move.fromRow - 1 == move.toRow &&
-					(move.fromColumn + 1 == move.toColumn
-					|| move.fromColumn - 1 == move.toColumn) &&
-					board[move.toRow][move.toColumn].player()
-					== Player.BLACK){
-				moved = true;
-				return true;
-			}
-			else
-				return false;
 			
 		}
 		}
 		return false;
+		
 	}
+	
 }
