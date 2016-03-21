@@ -2,7 +2,6 @@ package chess;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -62,6 +61,7 @@ public class ChessPanel extends JPanel {
 		add(bottom, BorderLayout.SOUTH);
 		
 		moving = false;
+		model.currentPlayer();
 		
 		displayBoard();
 	}
@@ -116,7 +116,9 @@ public class ChessPanel extends JPanel {
 			for (int row = 0; row < SIZE; row++){
 				for (int col = 0; col < SIZE; col++){
 					if (board[row][col] == event.getSource() && 
-							model.containsPiece(row, col)){
+							model.containsPiece(row, col) && 
+							model.pieceAt(row, col).player() == 
+							model.currentPlayer()){
 						// selects piece, is moving
 						piece = model.pieceAt(row, col);
 						initialRow = row;
@@ -131,16 +133,18 @@ public class ChessPanel extends JPanel {
 							model.move(move);
 							moving = false;
 							piece = null;
+							model.setNextPlayer();
 						}
 					}
 				}
 			}
 			
+			//button events
 			if(event.getSource() == butQuit)
 				System.exit(0);
 			
 			if(event.getSource() == butReset){
-//				game.reset();
+				model = new ChessModel();
 			}
 			
 			displayBoard();
