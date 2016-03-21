@@ -136,6 +136,17 @@ public class ChessPanel extends JPanel {
 							model.setNextPlayer();
 						}
 					}
+					else if(board[row][col] == event.getSource()
+							&& moving && model.pieceAt(row, col).type()
+							.equals("rook") && model.pieceAt(row, col)
+							.player() == model.currentPlayer() &&
+							piece.type().equals("king")){
+						if(model.castle()){
+							moving = false;
+							piece = null;
+							model.setNextPlayer();
+						}
+					}
 				}
 			}
 			
