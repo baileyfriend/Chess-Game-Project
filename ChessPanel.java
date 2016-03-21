@@ -124,27 +124,35 @@ public class ChessPanel extends JPanel {
 						initialRow = row;
 						initialCol = col;
 						moving = true;
+						//CASTLING TO DO
+//						if(piece.type().equals("king") && model
+//								.pieceAt(row, col).type().equals("rook")){
+//							if(model.castle(move)){
+//								moving = false;
+//								piece = null;
+//								model.setNextPlayer();
+//								System.out.println("It worked");
+//							}
+//						}
 					}
 					else if (board[row][col] == event.getSource()
 							&& moving){
 						move = new Move(initialRow, initialCol, row,
 								col);
+
 						if(model.isValidMove(move)){
 							model.move(move);
-							moving = false;
-							piece = null;
-							model.setNextPlayer();
-						}
-					}
-					else if(board[row][col] == event.getSource()
-							&& moving && model.pieceAt(row, col).type()
-							.equals("rook") && model.pieceAt(row, col)
-							.player() == model.currentPlayer() &&
-							piece.type().equals("king")){
-						if(model.castle()){
-							moving = false;
-							piece = null;
-							model.setNextPlayer();
+							if(model.inCheck(model.currentPlayer())){
+					        	Move back = new Move(move.toRow, move.toColumn, 
+					        			move.fromRow, move.fromColumn);
+					    		model.move(back);
+					    		System.out.println("CHECK");
+					    	}
+							else{
+								moving = false;
+								piece = null;
+								model.setNextPlayer();
+							}
 						}
 					}
 				}
