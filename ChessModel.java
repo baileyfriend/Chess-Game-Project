@@ -103,6 +103,19 @@ board[7][4] = new Queen(Player.WHITE);
     	player = player.next();
     	return player;
     }
+        public boolean castle(Move move){
+    	if(pieceAt(move.fromRow,move.fromColumn).type() == "king" && pieceAt(move.toRow,move.toColumn).type() == "rook"){
+    		if(((King) pieceAt(move.fromRow,move.fromColumn)).getMoved() == false && ((Rook) pieceAt(move.toRow,move.toColumn)).getMoved() == false){
+    			Move kingMove = new Move(7,5,7,6); 
+    			Move rookMove = new Move(7,7,7,5);
+    			move(kingMove);
+    			move(rookMove);
+    			return true;
+    		}
+    	}
+    		
+    return false;	
+    }
 }
     
 //    public void takePiece(Move move){
