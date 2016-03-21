@@ -8,6 +8,8 @@ import java.util.*;
 public class ChessModel implements IChessModel {
     private IChessPiece[][] board;
     private Player player;
+    public ArrayList<IChessPiece> takenWhite;
+    public ArrayList<IChessPiece> takenBlack;
 
     public ChessModel() {
     	board = new IChessPiece[8][8];
@@ -197,5 +199,25 @@ public class ChessModel implements IChessModel {
 		
 	return false;
     }
+        public void addToTaken(Move move, IChessPiece[][] board){
+    	IChessPiece thePieceAt = pieceAt(move.toRow,move.toColumn);
+    	
+    	if(thePieceAt.type()!=null &&Player.WHITE.equals(currentPlayer())){
+    		takenWhite.add(thePieceAt);
+    	}
+    	else if(thePieceAt.type()!=null &&Player.BLACK.equals(currentPlayer())){
+    		takenBlack.add(thePieceAt);
+    	}
+    }
+    
+    public ArrayList<IChessPiece> getTakenArrays(){
+    	if(currentPlayer().equals(Player.WHITE)){
+    		return takenWhite;
+    	}
+    	else{
+    		return takenBlack;
+    	}
+    }
+    
 }
 
