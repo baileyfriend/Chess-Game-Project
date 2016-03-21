@@ -104,18 +104,62 @@ board[7][4] = new Queen(Player.WHITE);
     	return player;
     }
         public boolean castle(Move move){
-    	if(pieceAt(move.fromRow,move.fromColumn).type() == "king" && pieceAt(move.toRow,move.toColumn).type() == "rook"){
+ //white long castling
+    	if(pieceAt(move.fromRow,move.fromColumn).type().equals("king") 
+    			&& pieceAt(move.toRow,move.toColumn).type().equals("rook")
+    			&& move.fromRow == 7 && move.toColumn == 7){
     		if(((King) pieceAt(move.fromRow,move.fromColumn)).getMoved() == false && ((Rook) pieceAt(move.toRow,move.toColumn)).getMoved() == false){
-    			Move kingMove = new Move(7,4,7,6); 
-    			Move rookMove = new Move(7,7,7,5);
+    			Move kingMove = new Move(7,3,7,5); 
+    			Move rookMove = new Move(7,7,7,4);
+    			move(kingMove);
+    			move(rookMove);
+    			return true;	
+    		}
+    	}
+    	
+    	//white short castling
+    	if(pieceAt(move.fromRow,move.fromColumn).type().equals("king") 
+    			&& pieceAt(move.toRow,move.toColumn).type().equals("rook")
+    			&& move.fromRow == 7 && move.toColumn == 0){
+    		if(((King) pieceAt(move.fromRow,move.fromColumn)).getMoved() == false 
+    				&& ((Rook) pieceAt(move.toRow,move.toColumn)).getMoved() == false){
+    			Move kingMove = new Move(7,4,7,1); 
+    			Move rookMove = new Move(0,0,7,2);
+    			move(kingMove);
+    			move(rookMove);
+    			return true;	
+    		}
+    	}
+    	
+    	//black short castling
+    	if(pieceAt(move.fromRow,move.fromColumn).type().equals("king") 
+    			&& pieceAt(move.toRow,move.toColumn).type().equals("rook")
+    			&& move.fromRow == 0 && move.toColumn == 0){
+    		if(((King) pieceAt(move.fromRow,move.fromColumn)).getMoved() == false 
+    				&& ((Rook) pieceAt(move.toRow,move.toColumn)).getMoved() == false){
+    			Move kingMove = new Move(0,4,0,1); 
+    			Move rookMove = new Move(0,0,0,2);
     			move(kingMove);
     			move(rookMove);
     			return true;
     		}
     	}
+    	
+    	//black long castling
+    	if(pieceAt(move.fromRow,move.fromColumn).type().equals("king") 
+    			&& pieceAt(move.toRow,move.toColumn).type().equals("rook")
+    			&& move.fromRow == 0 && move.toColumn == 7){
+    		if(((King) pieceAt(move.fromRow,move.fromColumn)).getMoved() == false && ((Rook) pieceAt(move.toRow,move.toColumn)).getMoved() == false){
+    			Move kingMove = new Move(0,3,0,5); 
+    			Move rookMove = new Move(0,7,0,4);
+    			move(kingMove);
+    			move(rookMove);
+    			return true;
+    			
+    		}
+    	}
     		
     return false;	
-    }
 }
     
 //    public void takePiece(Move move){
