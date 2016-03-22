@@ -195,17 +195,14 @@ public class ChessModel implements IChessModel {
 		return board[row][column];
 	}
 	/**
-     * Returns Whether the selected spot contains a piece
+     * checks to see whether the row and column contains a piece 
+     * - returns true if there is a piece there, 
+     * and false if not
      * 
      * @return true if there is a piece in the selected spot
      * @return false if there is no piece in the seleceted spot
      */
-	public boolean containsPiece(int row, int column) {// checks to see whether
-														// the row and column
-														// contains a piece -
-														// returns true if there
-														// is a piece there, and
-														// false if not
+	public boolean containsPiece(int row, int column) {
 
 		try {
 			if (board[row][column].type() == null)
