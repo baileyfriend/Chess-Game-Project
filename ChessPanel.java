@@ -24,8 +24,6 @@ public class ChessPanel extends JPanel {
 	
 	private ButtonListener buttonListener = new ButtonListener();
 	
-	
-	
 	public ChessPanel(){
 		JPanel center = new JPanel();
 		JPanel top = new JPanel();
@@ -63,6 +61,9 @@ public class ChessPanel extends JPanel {
 		moving = false;
 		model.currentPlayer();
 		
+		piece = null;
+		move = null;
+		
 		displayBoard();
 	}
 	
@@ -75,6 +76,7 @@ public class ChessPanel extends JPanel {
 				//paint-specific commands
 				board[row][col].setOpaque(true);
 				board[row][col].setBorderPainted(false);
+				
 				
 				if((row + col) % 2 == 0){
 					board[row][col].setBackground(Color.RED);
@@ -102,6 +104,12 @@ public class ChessPanel extends JPanel {
 				if(model.pieceAt(row, col) == piece && piece != null){
 					board[row][col].setBackground(Color.GREEN);
 				}
+				
+//				for(int x = 0; x < model.possibleMoves(initialRow, initialCol).size(); x++){
+//					if(model.possibleMoves(initialRow, initialCol).get(x)){
+//						board[row][col]
+//					}
+//				}
 			}
 		}
 	}
@@ -115,46 +123,58 @@ public class ChessPanel extends JPanel {
 			// identifies which tile was selected
 			for (int row = 0; row < SIZE; row++){
 				for (int col = 0; col < SIZE; col++){
+					// if user selects piece
 					if (board[row][col] == event.getSource() && 
 							model.containsPiece(row, col) && 
 							model.pieceAt(row, col).player() == 
 							model.currentPlayer()){
-						// selects piece, is moving
+						
+						// checks for castle
+						if(piece != null)
+						if(piece.type().equals("king") && model
+								.pieceAt(row, col).type().equals("rook")){
+							move = new Move(initialRow, initialCol, row, col);
+							if(model.castle(move)){
+								moving = false;
+								piece = null;
+								model.setNextPlayer();
+								System.out.println("It worked");
+							}
+						}
+						
+						// piece selected, recorded
 						piece = model.pieceAt(row, col);
 						initialRow = row;
 						initialCol = col;
 						moving = true;
-						//CASTLING TO DO
-//						if(piece.type().equals("king") && model
-//								.pieceAt(row, col).type().equals("rook")){
-//							if(model.castle(move)){
-//								moving = false;
-//								piece = null;
-//								model.setNextPlayer();
-//								System.out.println("It worked");
-//							}
-//						}
 					}
+					// piece already selected, get where to move
 					else if (board[row][col] == event.getSource()
 							&& moving){
+						
 						move = new Move(initialRow, initialCol, row,
 								col);
 
+						// makes sure move is valid
 						if(model.isValidMove(move)){
 							model.move(move);
+							// in check?
 							if(model.inCheck(model.currentPlayer())){
 					        	Move back = new Move(move.toRow, move.toColumn, 
 					        			move.fromRow, move.fromColumn);
 					    		model.move(back);
 					    		System.out.println("CHECK");
 					    	}
+							// move is good, taking destination piece
 							else{
 								moving = false;
+								model.addToTaken(piece);
 								piece = null;
 								model.setNextPlayer();
 							}
 						}
 					}
+					
 				}
 			}
 			
