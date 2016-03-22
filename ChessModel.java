@@ -88,23 +88,44 @@ public class ChessModel implements IChessModel {
 		IChessPiece tempPiece = null;
 		boolean memory = false;
 
+		// runs through each location
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
+				// if there is a piece...
 				if (ChessPiece.exists(x, y, board)) {
-					if (this.pieceAt(x, y).player() == this.currentPlayer()) {
-						for (int z = 0; z < this.possibleMoves(x, y).size(); z++) {
-							tempMove = new Move(this.possibleMoves(x, y).get(z).toRow,
-									this.possibleMoves(x, y).get(z).toColumn, this.possibleMoves(x, y).get(z).fromRow,
-									this.possibleMoves(x, y).get(z).fromColumn);
-							if (ChessPiece.exists(this.possibleMoves(x, y).get(z).toRow,
-									this.possibleMoves(x, y).get(z).toColumn, board)) {
-								tempPiece = this.pieceAt(this.possibleMoves(x, y).get(z).toRow,
-										this.possibleMoves(x, y).get(z).toColumn);
+					// get player
+					if (this.pieceAt(x, y).player() == this
+							.currentPlayer()) {
+						// go through all moves
+						for (int z = 0; z < this.possibleMoves(x, y)
+								.size(); z++) {
+							// temp to save move backwards
+							tempMove = new Move(this
+									.possibleMoves(x, y).get(z).toRow,
+									this.possibleMoves(x, y).get(z)
+									.toColumn, this.possibleMoves(x, y)
+									.get(z).fromRow,
+									this.possibleMoves(x, y).get(z)
+									.fromColumn);
+							// if move would take piece, saves victim
+							if (ChessPiece.exists(this
+									.possibleMoves(x, y).get(z).toRow,
+									this.possibleMoves(x, y).get(z)
+									.toColumn, board)) {
+								// assigns taken victim
+								tempPiece = this.pieceAt(this
+										.possibleMoves(x, y).get(z)
+										.toRow, this
+										.possibleMoves(x, y)
+										.get(z).toColumn);
 								memory = true;
 							}
+							// if move would get out of check, not
+							// in checkmate
 							this.move(this.possibleMoves(x, y).get(z));
 							if (!this.inCheck(currentPlayer()))
 								return false;
+							// otherwise, undo's move, resets piece
 							this.move(tempMove);
 							if (memory) {
 								this.setPiece(tempPiece, x, y);
@@ -121,23 +142,27 @@ public class ChessModel implements IChessModel {
 	
 	/******************************************************************
 	 * Returns whether the piece at location
-	 * {@code [move.fromRow, move.fromColumn]} is allowed to move to location
+	 * {@code [move.fromRow, move.fromColumn]}
+	 * is allowed to move to location
 	 * {@code [move.fromRow, move.fromColumn]}.
 	 *
-	 * @param move a {@link W13project3.Move} object describing the move to be made.
+	 * @param move a {@link W13project3.Move} object describing the
+	 *  move to be made.
 	 * @return {@code true} if the proposed move is valid, {@code false}
 	 *         otherwise.
 	 * @throws IndexOutOfBoundsException
 	 *             if either {@code [move.fromRow, move.fromColumn]} or
-	 *             {@code [move.toRow,move.toColumn]} don't represent valid
-	 *             locations on the board.
+	 *             {@code [move.toRow,move.toColumn]} don't represent
+	 *             valid locations on the board.
 	 *****************************************************************/
 	
 	public boolean isValidMove(Move move) {
 		boolean result = false;
 
 		try {
-			result = board[move.fromRow][move.fromColumn].isValidMove(move, board);
+			// calls ChessPiece, after accounting for null locations
+			result = board[move.fromRow][move.fromColumn]
+					.isValidMove(move, board);
 		} catch (Exception NullPointerException) {
 			return false;
 		}
@@ -147,17 +172,23 @@ public class ChessModel implements IChessModel {
 
 	
 	/******************************************************************
-     * Moves the piece from location {@code [move.fromRow, move.fromColumn]} to location {@code [move.fromRow,
+     * Moves the piece from location {@code [move.fromRow,
+     * move.fromColumn]} to location {@code [move.fromRow,
      * move.fromColumn]}.
      *
-     * @param move a {@link W13project3.Move} object describing the move to be made.
-     * @throws IndexOutOfBoundsException if either {@code [move.fromRow, move.fromColumn]} or {@code [move.toRow,
-     *         move.toColumn]} don't represent valid locations on the board.
+     * @param move a {@link W13project3.Move} object describing th
+     * 	e move to be made.
+     * @throws IndexOutOfBoundsException if either {@code 
+     * 	[move.fromRow, move.fromColumn]} or {@code [move.toRow,
+     *  move.toColumn]} don't represent valid locations on the board.
      *****************************************************************/
 	
 	public void move(Move move) {
-		board[move.toRow][move.toColumn] = pieceAt(move.fromRow, move.fromColumn);
+		// simply puts piece at old locxation at place at new
+		board[move.toRow][move.toColumn] = pieceAt(move.fromRow,
+				move.fromColumn);
 		pieceAt(move.toRow, move.toColumn).setMoved(true);
+		// null's old location
 		board[move.fromRow][move.fromColumn] = null;
 	}
 
@@ -165,18 +196,27 @@ public class ChessModel implements IChessModel {
 	/******************************************************************
      * Report whether the current player p is in check.
      * @param  p {@link W13project3.Move} the Player being checked
-     * @return {@code true} if the current player is in check, {@code false} otherwise.
+     * @return true if current player in check, false otherwise.
      *****************************************************************/
 	
 	public boolean inCheck(Player p) {
+		// loop through all locations
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				if (this.containsPiece(x, y) && board[x][y].player() != p) {
-					for (int z = 0; z < this.possibleMoves(x, y).size(); z++) {
-						int tRow = this.possibleMoves(x, y).get(z).toRow;
-						int tCol = this.possibleMoves(x, y).get(z).toColumn;
+				// if location contains enemy piece
+				if (this.containsPiece(x, y) && board[x][y].player()
+						!= p) {
+					// loop through all its moves
+					for (int z = 0; z < this.possibleMoves(x, y)
+							.size(); z++) {
+						int tRow = this.possibleMoves(x, y).get(z)
+								.toRow;
+						int tCol = this.possibleMoves(x, y).get(z)
+								.toColumn;
+						// if target can be king, in check
 						if (this.containsPiece(tRow, tCol)) {
-							if (board[tRow][tCol].type() == "king" && board[tRow][tCol].player() == p)
+							if (board[tRow][tCol].type() == "king" &&
+									board[tRow][tCol].player() == p)
 								return true;
 						}
 					}
@@ -203,6 +243,8 @@ public class ChessModel implements IChessModel {
 		ArrayList<Move> results = new ArrayList<Move>();
 		Move test;
 
+		// runs through each place in board, if psssed piece can move
+		// there, is added to possibleMoves arrayList
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				test = new Move(r, c, x, y);
@@ -267,7 +309,7 @@ public class ChessModel implements IChessModel {
      * and false if not
      * 
      * @return true if there is a piece in the selected spot
-     * @return false if there is no piece in the seleceted spot
+     * @return false if there is no piece in the selected spot
      *****************************************************************/
 	
 	public void setPiece(IChessPiece temp, int row, int col) {
@@ -283,7 +325,7 @@ public class ChessModel implements IChessModel {
 	 * @return whether or not there is a piece
 	 */
 	public boolean containsPiece(int row, int column) {
-		// checks to see whether the row and column contains a piece - returns
+		// checks whether the row and column contains a piece - returns
 		// true if there is a piece there, and false if not
 
 		try {
@@ -320,46 +362,60 @@ public class ChessModel implements IChessModel {
 	
 	public boolean canCastle(Move move) {
 		try {
+			// can't castle out of check
 			if (this.inCheck(this.currentPlayer())) {
 				return false;
 			}
+			// checks if there are pieces to right
 			if (move.fromColumn > move.toColumn) {
-				for (int x = move.fromColumn - 1; x > move.toColumn; x--) {
+				for (int x = move.fromColumn - 1; x > move.toColumn;
+						x--) {
 					if (ChessPiece.exists(move.fromRow, x, board)) {
 						return false;
 					}
 				}
+			// checks if there are pieces to left
 			} else if (move.fromColumn < move.toColumn) {
-				for (int x = move.fromColumn + 1; x < move.toColumn; x++) {
+				for (int x = move.fromColumn + 1; x < move.toColumn;
+						x++) {
 					if (ChessPiece.exists(move.fromRow, x, board)) {
 						return false;
 					}
 				}
 			}
+			// bottom right castle
 			if (move.fromRow == 7 && move.toColumn == 7) {
-				if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-						&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+				if (((King) pieceAt(move.fromRow, move.fromColumn))
+						.getMoved() == false
+						&& ((Rook) pieceAt(move.toRow, move.toColumn))
+						.getMoved() == false) {
 					return true;
 				}
 			}
-
+			// bottom left castle
 			if (move.fromRow == 7 && move.toColumn == 0) {
-				if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-						&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+				if (((King) pieceAt(move.fromRow, move.fromColumn))
+						.getMoved() == false
+						&& ((Rook) pieceAt(move.toRow, move.toColumn))
+						.getMoved() == false) {
 					return true;
 				}
 			}
-
+			// top left castle
 			if (move.fromRow == 0 && move.toColumn == 0) {
-				if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-						&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+				if (((King) pieceAt(move.fromRow, move.fromColumn))
+						.getMoved() == false
+						&& ((Rook) pieceAt(move.toRow, move.toColumn))
+						.getMoved() == false) {
 					return true;
 				}
 			}
-
+			// top right castle
 			if (move.fromRow == 0 && move.toColumn == 7) {
-				if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-						&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+				if (((King) pieceAt(move.fromRow, move.fromColumn))
+						.getMoved() == false
+						&& ((Rook) pieceAt(move.toRow, move.toColumn))
+						.getMoved() == false) {
 					return true;
 				}
 			}
@@ -381,6 +437,7 @@ public class ChessModel implements IChessModel {
 	
 	public boolean castle(Move move) {
 
+		// all covered in canCastle method
 		if (this.inCheck(this.currentPlayer())) {
 			return false;
 		}
@@ -400,8 +457,10 @@ public class ChessModel implements IChessModel {
 
 		// white long castling
 		if (move.fromRow == 7 && move.toColumn == 7) {
-			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+			if (((King) pieceAt(move.fromRow, move.fromColumn))
+					.getMoved() == false
+					&& ((Rook) pieceAt(move.toRow, move.toColumn))
+					.getMoved() == false) {
 				Move kingMove = new Move(7, 3, 7, 5);
 				Move rookMove = new Move(7, 7, 7, 4);
 				move(kingMove);
@@ -412,8 +471,10 @@ public class ChessModel implements IChessModel {
 
 		// white short castling
 		if (move.fromRow == 7 && move.toColumn == 0) {
-			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+			if (((King) pieceAt(move.fromRow, move.fromColumn))
+					.getMoved() == false
+					&& ((Rook) pieceAt(move.toRow, move.toColumn))
+					.getMoved() == false) {
 				Move kingMove = new Move(7, 3, 7, 1);
 				Move rookMove = new Move(7, 0, 7, 2);
 				move(kingMove);
@@ -424,8 +485,10 @@ public class ChessModel implements IChessModel {
 
 		// black short castling
 		if (move.fromRow == 0 && move.toColumn == 0) {
-			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+			if (((King) pieceAt(move.fromRow, move.fromColumn))
+					.getMoved() == false
+					&& ((Rook) pieceAt(move.toRow, move.toColumn))
+					.getMoved() == false) {
 				Move kingMove = new Move(0, 3, 0, 1);
 				Move rookMove = new Move(0, 0, 0, 2);
 				move(kingMove);
@@ -436,8 +499,10 @@ public class ChessModel implements IChessModel {
 
 		// black long castling
 		if (move.fromRow == 0 && move.toColumn == 7) {
-			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
-					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
+			if (((King) pieceAt(move.fromRow, move.fromColumn))
+					.getMoved() == false
+					&& ((Rook) pieceAt(move.toRow, move.toColumn))
+					.getMoved() == false) {
 				Move kingMove = new Move(0, 3, 0, 5);
 				Move rookMove = new Move(0, 7, 0, 4);
 				move(kingMove);
@@ -497,6 +562,7 @@ public class ChessModel implements IChessModel {
 		int row = 0;
 		int col = 0;
 		try {
+			// checks all black Pawns
 			while (col < 8) {
 				if (ChessPiece.exists(row, col, board)) {
 					if (board[row][col].type().equals("pawn")) {
@@ -509,6 +575,7 @@ public class ChessModel implements IChessModel {
 			row = 7;
 			col = 0;
 
+			// checks all white Pawns
 			while (col < 8) {
 				if (ChessPiece.exists(row, col, board)) {
 					if (board[row][col].type().equals("pawn")) {
