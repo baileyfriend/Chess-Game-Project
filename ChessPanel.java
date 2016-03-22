@@ -172,10 +172,9 @@ public class ChessPanel extends JPanel {
 				}
 			}
 
-			// if(model.pawnAtEnd().type().equals("pawn")){
-			// JOptionPane.showInputDialog("Choose the piece to bring back.",
-			// model.takenBlack);
-			// }
+//			if (model.pawnAtEnd().type().equals("pawn")) {
+//				JOptionPane.showInputDialog("Choose the piece to bring back.", model.takenBlack);
+//			}
 
 			// button events
 			if (event.getSource() == butQuit)
