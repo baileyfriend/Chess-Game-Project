@@ -23,7 +23,10 @@ public class ChessPanel extends JPanel {
 	private JButton butReset;
 
 	private ButtonListener buttonListener = new ButtonListener();
-
+	/**
+     * Constructs the ChessPanel and all necessary components
+     * including the board (8x8)
+     */
 	public ChessPanel() {
 		JPanel center = new JPanel();
 		JPanel top = new JPanel();
@@ -65,7 +68,10 @@ public class ChessPanel extends JPanel {
 
 		displayBoard();
 	}
-
+	/**
+     * Displays the board to the GUI by use of a double nested
+     * for loop which sets the color and the image icons
+     */
 	private void displayBoard() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
@@ -115,7 +121,12 @@ public class ChessPanel extends JPanel {
 			}
 		}
 	}
-
+	/**
+     * Creates the ButtonListener which listens for input from
+     * the user and determines which methods to call from the 
+     * ChessModel class.
+     * 
+     */
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
