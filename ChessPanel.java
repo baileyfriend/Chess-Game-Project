@@ -77,7 +77,7 @@ public class ChessPanel extends JPanel {
 				if ((row + col) % 2 == 0) {
 					board[row][col].setBackground(Color.RED);
 				} else
-					board[row][col].setBackground(Color.WHITE);
+					board[row][col].setBackground(Color.GRAY);
 
 				if (model.containsPiece(row, col)) {
 					Image img = null;
@@ -135,7 +135,6 @@ public class ChessPanel extends JPanel {
 									moving = false;
 									piece = null;
 									model.setNextPlayer();
-									System.out.println("It worked");
 								}
 							}
 
@@ -157,7 +156,7 @@ public class ChessPanel extends JPanel {
 							if (model.inCheck(model.currentPlayer())) {
 								Move back = new Move(move.toRow, move.toColumn, move.fromRow, move.fromColumn);
 								model.move(back);
-								System.out.println("CHECK");
+								JOptionPane.showMessageDialog(null, "That would put you in check.");
 							}
 							// move is good, taking destination piece
 							else {
@@ -165,6 +164,16 @@ public class ChessPanel extends JPanel {
 								model.addToTaken(piece);
 								piece = null;
 								model.setNextPlayer();
+								if (model.inCheck(model.currentPlayer())) {
+									String checkMessage = "";
+									checkMessage += model.currentPlayer() + " is in check.";
+									if(model.isComplete()){
+										String winnerString = "";
+										winnerString += model.setNextPlayer() + " has won!";
+										JOptionPane.showMessageDialog(null, winnerString);
+									}
+									JOptionPane.showMessageDialog(null, checkMessage);
+								}
 							}
 						}
 					}
@@ -172,9 +181,34 @@ public class ChessPanel extends JPanel {
 				}
 			}
 
-//			if (model.pawnAtEnd().type().equals("pawn")) {
-//				JOptionPane.showInputDialog("Choose the piece to bring back.", model.takenBlack);
-//			}
+			if (model.pawnAtEnd()) {
+
+				JPanel panel = new JPanel();
+				panel.add(new JLabel("Please choose a piece to promote to:"));
+				DefaultComboBoxModel box = new DefaultComboBoxModel();
+				if (model.currentPlayer() == Player.BLACK) {
+					for (int x = 0; x < model.takenWhite.size(); x++) {
+						box.addElement(model.takenWhite.get(x).type());
+					}
+					JComboBox comboBox = new JComboBox(box);
+					panel.add(comboBox);
+
+					int result = JOptionPane.showConfirmDialog(null, panel, "Promotion", JOptionPane.OK_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+
+					for (int x = 0; x < 8; x += 7) {
+						for (int y = 0; y < 8; y++) {
+							if (model.containsPiece(x, y)) {
+								if (model.pieceAt(x, y).type().equals("pawn")) {
+									System.out.println(model.pieceAt(x, y).type());
+									model.pawnSwap(model.takenWhite.get(result), x, y);
+								}
+							}
+						}
+					}
+				}
+
+			}
 
 			// button events
 			if (event.getSource() == butQuit)

@@ -48,6 +48,19 @@ public class ChessModel implements IChessModel {
 	}
 
 	public boolean isComplete() {
+		
+		if (inCheck(this.currentPlayer()) == true) {
+			for (int i = 0; i < board.length; i++) {
+				for (int x = 0; x < board.length; x++) {
+					if (pieceAt(i, x).player() == this.currentPlayer()) {
+						for (IChessPiece[] aPiece : board) {
+							inCheck(this.currentPlayer());
+						}
+
+					}
+				}
+			}
+		}
 		return false;
 	}
 
@@ -69,15 +82,14 @@ public class ChessModel implements IChessModel {
 	 */
 	public boolean isValidMove(Move move) {
 		boolean result = false;
-		
-		try{
-		result = board[move.fromRow][move.fromColumn].isValidMove(move, board);
-		}
-		catch(Exception NullPointerException){
+
+		try {
+			result = board[move.fromRow][move.fromColumn].isValidMove(move, board);
+		} catch (Exception NullPointerException) {
 			return false;
 		}
 		return result;
-		
+
 	}
 
 	public void move(Move move) {
@@ -102,25 +114,6 @@ public class ChessModel implements IChessModel {
 			}
 		}
 
-		return false;
-	}
-	
-		public boolean checkMate(Player p){
-		if(inCheck(p) == true){
-			for (int i = 0; i < board.length; i++) {
-				for (int x = 0; x < board.length; x++) {
-					if(pieceAt(i,x).player() == p){
-						for(IChessPiece[] aPiece: board){
-							inCheck(p);
-							System.out.println("CheckMate");
-						}
-							
-					}
-				}
-			}
-			
-		}
-		
 		return false;
 	}
 
@@ -178,47 +171,47 @@ public class ChessModel implements IChessModel {
 		player = player.next();
 		return player;
 	}
-	
-	public boolean canCastle(Move move){
-		if (move.fromRow == 7
-				&& move.toColumn == 7) {
+
+	public boolean canCastle(Move move) {
+		try{
+		if (move.fromRow == 7 && move.toColumn == 7) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				return true;
 			}
 		}
-		
-		if (move.fromRow == 7
-				&& move.toColumn == 0) {
+
+		if (move.fromRow == 7 && move.toColumn == 0) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				return true;
 			}
 		}
-		
-		if (move.fromRow == 0
-				&& move.toColumn == 0) {
+
+		if (move.fromRow == 0 && move.toColumn == 0) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				return true;
 			}
 		}
-		
-		if (move.fromRow == 0
-				&& move.toColumn == 7) {
+
+		if (move.fromRow == 0 && move.toColumn == 7) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				return true;
 			}
 		}
-		
+		}
+		catch(Exception NullPointerException){
+			return false;
+		}
+
 		return false;
 	}
 
 	public boolean castle(Move move) {
 		// white long castling
-		if (move.fromRow == 7
-				&& move.toColumn == 7) {
+		if (move.fromRow == 7 && move.toColumn == 7) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				Move kingMove = new Move(7, 3, 7, 5);
@@ -230,8 +223,7 @@ public class ChessModel implements IChessModel {
 		}
 
 		// white short castling
-		if (move.fromRow == 7
-				&& move.toColumn == 0) {
+		if (move.fromRow == 7 && move.toColumn == 0) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				Move kingMove = new Move(7, 3, 7, 1);
@@ -243,8 +235,7 @@ public class ChessModel implements IChessModel {
 		}
 
 		// black short castling
-		if (move.fromRow == 0
-				&& move.toColumn == 0) {
+		if (move.fromRow == 0 && move.toColumn == 0) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				Move kingMove = new Move(0, 3, 0, 1);
@@ -256,8 +247,7 @@ public class ChessModel implements IChessModel {
 		}
 
 		// black long castling
-		if (move.fromRow == 0
-				&& move.toColumn == 7) {
+		if (move.fromRow == 0 && move.toColumn == 7) {
 			if (((King) pieceAt(move.fromRow, move.fromColumn)).getMoved() == false
 					&& ((Rook) pieceAt(move.toRow, move.toColumn)).getMoved() == false) {
 				Move kingMove = new Move(0, 3, 0, 5);
@@ -288,8 +278,8 @@ public class ChessModel implements IChessModel {
 			return takenBlack;
 		}
 	}
-	
-	 	 public boolean pawnAtEnd(){
+
+	public boolean pawnAtEnd() {
 		int row = 0;
 		int col = 0;
 		try {
@@ -317,6 +307,4 @@ public class ChessModel implements IChessModel {
 		board[r][c] = piece;
 
 	}
-
-    }
 }
