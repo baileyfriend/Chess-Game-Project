@@ -62,6 +62,18 @@ public abstract class ChessPiece implements IChessPiece {
 			return true;
 	}
 	
+	/**
+	 * Checks whether a piece exists at the given row and column on the board
+	 * 
+	 * @param r Row of board being checked for piece
+	 * @param c Column of board being checked for piece
+	 * @param board This is the board
+	 * 
+	 * @return true if there is a piece in the given
+	 * r and c
+	 * @return false if there is no piece in the given
+	 * r and c (meaning you have a null pointer)
+	 */
 	public static boolean exists(int r, int c, IChessPiece[][] board){
 		try{
 			board[r][c].type();
