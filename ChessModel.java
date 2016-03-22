@@ -262,4 +262,45 @@ public class ChessModel implements IChessModel {
 			return takenBlack;
 		}
 	}
+	/**
+     * Loops to find if there is a pawn in one of the "end zones"
+     * if a pawn is in one of the end zones, then returns true, if not
+     * returns false. Also calls the getTakenArrays before returning so
+     * that the panel can get the necessary data to display to the 
+     * user
+     * 
+     * @return player the current player
+     */
+    public IChessPiece pawnAtEnd(){
+    	int row = 0;
+    	int col = 0; 
+    	try{
+    	while(row<=8){
+    	while(col<8){
+    		if(board[row][col].type() == "pawn"){
+    			getTakenArrays();
+    			col++;
+    			return board[row][col];
+    		}
+    		row+=7;
+    	}
+    	}
+    	} catch(ArrayIndexOutOfBoundsException e){
+    		return null;
+    	}
+    	catch(NullPointerException e){
+    		return null;
+    	}
+    	return null;	
+    }
+    
+    public void pawnSwap(){
+    	IChessPiece thePawnAtTheEnd = pawnAtEnd();
+    	ArrayList<IChessPiece> swapArray = getTakenArrays();
+    	thePawnAtTheEnd = swapArray.get(0);
+//    	System.out.println(swapArray);
+//    	System.out.println(thePawnAtTheEnd);
+
+    }
+    
 }
