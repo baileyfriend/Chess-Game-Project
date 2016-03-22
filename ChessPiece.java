@@ -19,19 +19,34 @@ public abstract class ChessPiece implements IChessPiece {
 	//	public void setTaken(boolean taken) {
 	//		this.taken = taken;
 	//	}
-
+	/**
+     * Constructor of ChessPiece with a parameter of player.
+     * 
+     * 
+     * @param player is the player that the ChessPiece belongs to
+     */
 	protected ChessPiece(Player player) {
 		this.owner = player;
 		//this.thisChessModel;
 	}
-
+	/**
+     * Abstract method - inherited by all chesspieces
+     * Returns the type of piece(king,queen,pawn, etc)
+     *
+     */
 	public abstract String type();
 
 	public Player player() {
 		return this.owner;
 
 	}
-
+	/**
+     * Checks for a piece betweeen the starting and ending 
+     * points of a move
+     * 
+     * @param move Is the move being done
+     * @param board The board that contains all the pieces
+     */
 	public boolean isPieceBetween(Move move, IChessPiece[][] board){
 
 		if(board[move.fromRow][move.fromColumn].type() != "bishop"){
