@@ -104,6 +104,25 @@ public class ChessModel implements IChessModel {
 
 		return false;
 	}
+	
+		public boolean checkMate(Player p){
+		if(inCheck(p) == true){
+			for (int i = 0; i < board.length; i++) {
+				for (int x = 0; x < board.length; x++) {
+					if(pieceAt(i,x).player() == p){
+						for(IChessPiece[] aPiece: board){
+							inCheck(p);
+							System.out.println("CheckMate");
+						}
+							
+					}
+				}
+			}
+			
+		}
+		
+		return false;
+	}
 
 	public ArrayList<Move> possibleMoves(int r, int c) {
 		ArrayList<Move> results = new ArrayList<Move>();
