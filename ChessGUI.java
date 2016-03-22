@@ -12,7 +12,7 @@ public class ChessGUI {
 	private static JFrame frame;
 	
 	/******************************************************************
-	 * Main that creates a JFrame that holds the MineSweeperPanel GUI
+	 * Main that creates a JFrame that holds the ChessPanel GUI
 	 *****************************************************************/
 	public static void main (String[] args)
 	{
@@ -25,7 +25,9 @@ public class ChessGUI {
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
-	
+	/******************************************************************
+	 * Resets the board and creates a new board
+	 *****************************************************************/
 	public static void reset(){
 		frame.dispose();
 		JFrame frame = new JFrame ("Chess");
