@@ -2,6 +2,7 @@ package chess;
 
 public interface IChessPiece {
 
+	public boolean moved = false;
 
     /**
      * Return the player that owns this piece.
@@ -35,4 +36,16 @@ public interface IChessPiece {
      * @throws IllegalArgumentException  if {@code this} object isn't the piece at location {@code [move.fromRow, move.fromColumn]}.
      */
     boolean isValidMove(Move move, IChessPiece[][] board);
+
+	void setMoved(boolean b);
+	
+	static boolean exists(int r, int c, IChessPiece[][] board){
+		try{
+			board[r][c].type();
+			return true;
+		}
+		catch(Exception NullPointerException){
+			return false;
+		}
+	}
 }

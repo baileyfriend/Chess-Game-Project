@@ -7,113 +7,17 @@ package chess;
 public abstract class ChessPiece implements IChessPiece {
 
 	private Player owner;
-	private ChessModel model;
-	//    public boolean taken;
-
-	//private ChessModel thisChessModel;
-
-	//    public boolean isTaken() {
-	//		return taken;
-	//	}
-	//
-	//	public void setTaken(boolean taken) {
-	//		this.taken = taken;
-	//	}
-	/**
-     * Constructor of ChessPiece with a parameter of player.
-     * 
-     * 
-     * @param player is the player that the ChessPiece belongs to
-     */
+	public boolean moved;
+	
+	
 	protected ChessPiece(Player player) {
 		this.owner = player;
-		//this.thisChessModel;
 	}
-	/**
-     * Abstract method - inherited by all chesspieces
-     * Returns the type of piece(king,queen,pawn, etc)
-     *
-     */
+
 	public abstract String type();
 
 	public Player player() {
 		return this.owner;
-
-	}
-	/**
-     * Checks for a piece betweeen the starting and ending 
-     * points of a move
-     * 
-     * @param move Is the move being done
-     * @param board The board that contains all the pieces
-     */
-	public boolean isPieceBetween(Move move, IChessPiece[][] board){
-
-		if(board[move.fromRow][move.fromColumn].type() != "bishop"){
-			for(int fr = move.fromRow; fr<move.toRow; fr++){
-				for(int fc = move.fromColumn; fc<move.toColumn; fc++){
-					if(board[fr][fc].type()!=null)
-						return true;
-				}
-			}
-			return false;
-		}
-		else if(board[move.fromRow][move.fromColumn].type() == "bishop"){
-			int rowDiff = move.fromRow - move.toRow; //checks what the absolute value of the difference between the fromrow to the torow is
-			int colDiff = move.fromColumn - move.toColumn;
-			boolean downRight = rowDiff>0 && colDiff>0 ? true:false;
-			boolean downLeft = rowDiff> 0 && colDiff<0 ? true:false;
-			boolean upLeft = rowDiff<0 && colDiff<0 ? true:false;
-			boolean upRight = rowDiff<0 && colDiff>0 ? true:false;
-			int theRow = move.fromRow;
-			int theCol = move.fromColumn;
-			int toRow = move.toRow;
-			int toCol = move.toColumn;
-			if(downRight==true){
-				while(theRow<toRow){
-					while(theCol<toCol){
-						if(model.pieceAt(theRow,theCol).type() != null)
-							return true;
-						theRow++;
-						theCol++;
-					}
-				}
-			}
-			if(downLeft==true){
-				while(theRow<toRow){
-					while(theCol>toCol){
-						if(model.pieceAt(theRow,theCol).type() != null)
-							return true;
-						theRow++;
-						theCol--;
-					}
-				}
-			}
-			if(upRight==true){
-				while(theRow>toRow){
-					while(theCol>toCol){
-						if(model.pieceAt(theRow,theCol).type() != null)
-							return true;
-						theRow--;
-						theCol++;
-					}
-				}
-			}
-			if(upLeft==true){
-				while(theRow>toRow){
-					while(theCol>toCol){
-						if(model.pieceAt(theRow,theCol).type() != null)
-							return true;
-						theRow--;
-						theCol--;
-					}
-				}
-			}
-
-		}
-		return false;
-
-
 	}
 
 	/**
@@ -145,12 +49,7 @@ public abstract class ChessPiece implements IChessPiece {
 				&& move.fromRow == move.toRow)
 			return false;
 
-		//if there is a piece between the the move.from and the move.to then return false
-		else if(isPieceBetween(move, board) == true 
-				&& board[move.fromRow][move.fromColumn].type() != "knight") 
-			return false;
-
-		//checks if chesspiece is owned by the current player or the next player
+		//checks if chessPiece is owned by the current player or the next player
 		try{
 			if (board[move.toRow][move.toColumn].player() == this.owner)//player() != owner.next())
 				return false;
@@ -162,10 +61,16 @@ public abstract class ChessPiece implements IChessPiece {
 		//if none of the above are true, then the move must be valid.
 			return true;
 	}
-
-
-
+	
+	public static boolean exists(int r, int c, IChessPiece[][] board){
+		try{
+			board[r][c].type();
+			return true;
+		}
+		catch(Exception NullPointerException){
+			return false;
+		}
+	}
 
 }
-
 

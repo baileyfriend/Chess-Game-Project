@@ -3,6 +3,7 @@ package chess;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,10 +24,13 @@ public class ChessPanel extends JPanel {
 	private JButton butReset;
 
 	private ButtonListener buttonListener = new ButtonListener();
+
+	
 	/**
      * Constructs the ChessPanel and all necessary components
      * including the board (8x8)
      */
+	
 	public ChessPanel() {
 		JPanel center = new JPanel();
 		JPanel top = new JPanel();
@@ -68,10 +72,13 @@ public class ChessPanel extends JPanel {
 
 		displayBoard();
 	}
+
+	
 	/**
      * Displays the board to the GUI by use of a double nested
      * for loop which sets the color and the image icons
      */
+	
 	private void displayBoard() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
@@ -110,23 +117,30 @@ public class ChessPanel extends JPanel {
 					.get(x).toColumn].setBackground(Color.YELLOW);
 		}
 
-		Move tempMove1 = new Move(initialRow, initialCol, initialRow, initialCol - 3);
-		Move tempMove2 = new Move(initialRow, initialCol, initialRow, initialCol + 4);
-		if (model.containsPiece(initialRow, initialCol)) {
-			if (model.pieceAt(initialRow, initialCol).type().equals("king") && model.canCastle(tempMove1)) {
-				board[initialRow][initialCol - 3].setBackground(Color.YELLOW);
+		try {
+			if (piece.type().equals("king")) {
+				Move tempMove1 = new Move(initialRow, initialCol, initialRow, initialCol - 3);
+				Move tempMove2 = new Move(initialRow, initialCol, initialRow, initialCol + 4);
+				if (model.canCastle(tempMove1)) {
+					board[initialRow][initialCol - 3].setBackground(Color.BLUE);
+				}
+				if (model.canCastle(tempMove2)) {
+					board[initialRow][initialCol + 4].setBackground(Color.BLUE);
+				}
 			}
-			if (model.pieceAt(initialRow, initialCol).type().equals("king") && model.canCastle(tempMove2)) {
-				board[initialRow][initialCol + 4].setBackground(Color.YELLOW);
-			}
+		} catch (Exception NullPointerException) {
+
 		}
 	}
+
+	
 	/**
      * Creates the ButtonListener which listens for input from
      * the user and determines which methods to call from the 
      * ChessModel class.
      * 
      */
+	
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
@@ -162,63 +176,76 @@ public class ChessPanel extends JPanel {
 
 						// makes sure move is valid
 						if (model.isValidMove(move)) {
+							if (model.containsPiece(row, col)) {
+								if (model.pieceAt(row, col).player() != model.currentPlayer()
+										&& !model.pieceAt(row, col).type().equals("pawn")) {
+									model.getNextTaken().add(model.pieceAt(row, col));
+								}
+							}
+							IChessPiece temp = model.pieceAt(row, col);
 							model.move(move);
 							// in check?
 							if (model.inCheck(model.currentPlayer())) {
 								Move back = new Move(move.toRow, move.toColumn, move.fromRow, move.fromColumn);
 								model.move(back);
-								JOptionPane.showMessageDialog(null, "That would put you in check.");
+								model.setPiece(temp, row, col);
+								JOptionPane.showMessageDialog(null, "Move invalid: in check.");
+								model.getNextTaken().remove(model.getNextTaken().size() - 1);
 							}
 							// move is good, taking destination piece
 							else {
 								moving = false;
-								model.addToTaken(piece);
 								piece = null;
 								model.setNextPlayer();
+								// if the move would put them in check, reverse everything
 								if (model.inCheck(model.currentPlayer())) {
 									String checkMessage = "";
 									checkMessage += model.currentPlayer() + " is in check.";
-									if(model.isComplete()){
-										String winnerString = "";
-										winnerString += model.setNextPlayer() + " has won!";
-										JOptionPane.showMessageDialog(null, winnerString);
-									}
 									JOptionPane.showMessageDialog(null, checkMessage);
+									// check if checkMate
+									if (model.isComplete()) {
+										String winnerString = "";
+										winnerString = model.setNextPlayer() + " has won!";
+										JOptionPane.showMessageDialog(null, winnerString);
+										for(int d = 0; d < 8; d++){
+											for(int e = 0; e < 8; e++){
+												board[d][e].setEnabled(false);
+											}
+										}
+									}
+								}
+
+								// if a pawn made it to the end
+								if (model.pawnAtEnd()) {
+									ArrayList<IChessPiece> promotionChoices = new ArrayList<IChessPiece>();
+									// creates arrayList of available pieces
+									for (int x = 0; x < model.getNextTaken().size(); x++) {
+										promotionChoices.add(model.getNextTaken().get(x));
+									}
+									// puts arrayList into array for formatting
+									IChessPiece[] arrayChoices = new IChessPiece[promotionChoices.size()];
+									promotionChoices.toArray(arrayChoices);
+									IChessPiece promotion = (IChessPiece) JOptionPane.showInputDialog(null,
+											"Promote your pawn to:", "Pawn Promotion", JOptionPane.PLAIN_MESSAGE, null,
+											arrayChoices, arrayChoices);
+
+									// if they hit cancel
+									if (promotion == null) {
+										JOptionPane.showMessageDialog(null, "Your pawn will promote to null.");
+										model.pawnSwap(promotion, row, col);
+										displayBoard();
+									} else {
+										JOptionPane.showMessageDialog(null,
+												"You pawn will be promoted to a " + promotion.type());
+										model.pawnSwap(promotion, row, col);
+										displayBoard();
+									}
 								}
 							}
 						}
 					}
 
 				}
-			}
-
-			if (model.pawnAtEnd()) {
-
-				JPanel panel = new JPanel();
-				panel.add(new JLabel("Please choose a piece to promote to:"));
-				DefaultComboBoxModel box = new DefaultComboBoxModel();
-				if (model.currentPlayer() == Player.BLACK) {
-					for (int x = 0; x < model.takenWhite.size(); x++) {
-						box.addElement(model.takenWhite.get(x).type());
-					}
-					JComboBox comboBox = new JComboBox(box);
-					panel.add(comboBox);
-
-					int result = JOptionPane.showConfirmDialog(null, panel, "Promotion", JOptionPane.OK_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-
-					for (int x = 0; x < 8; x += 7) {
-						for (int y = 0; y < 8; y++) {
-							if (model.containsPiece(x, y)) {
-								if (model.pieceAt(x, y).type().equals("pawn")) {
-									System.out.println(model.pieceAt(x, y).type());
-									model.pawnSwap(model.takenWhite.get(result), x, y);
-								}
-							}
-						}
-					}
-				}
-
 			}
 
 			// button events
