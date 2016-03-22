@@ -104,13 +104,21 @@ public class ChessPanel extends JPanel {
 				if(model.pieceAt(row, col) == piece && piece != null){
 					board[row][col].setBackground(Color.GREEN);
 				}
-				
-//				for(int x = 0; x < model.possibleMoves(initialRow, initialCol).size(); x++){
-//					if(model.possibleMoves(initialRow, initialCol).get(x)){
-//						board[row][col]
-//					}
-//				}
 			}
+		}
+		
+		
+		for(int x = 0; x < model.possibleMoves(initialRow, initialCol).size(); x++){
+			board[model.possibleMoves(initialRow, initialCol).get(x).toRow][model.possibleMoves(initialRow, initialCol).get(x).toColumn].setBackground(Color.YELLOW);
+		}
+		
+		Move tempMove1 = new Move(initialRow, initialCol, initialRow, initialCol - 3);
+		Move tempMove2 = new Move(initialRow, initialCol, initialRow, initialCol + 4);
+		if(model.pieceAt(initialRow, initialCol).type().equals("king") && model.canCastle(tempMove1)){
+			board[initialRow][initialCol - 3].setBackground(Color.YELLOW);
+		}
+		if(model.pieceAt(initialRow, initialCol).type().equals("king") && model.canCastle(tempMove2)){
+			board[initialRow][initialCol + 4].setBackground(Color.YELLOW);
 		}
 	}
 	
@@ -184,6 +192,7 @@ public class ChessPanel extends JPanel {
 			
 			if(event.getSource() == butReset){
 				model = new ChessModel();
+				ChessGUI.reset();
 			}
 			
 			displayBoard();
