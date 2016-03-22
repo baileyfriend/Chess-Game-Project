@@ -289,35 +289,34 @@ public class ChessModel implements IChessModel {
 		}
 	}
 	
-	 public IChessPiece pawnAtEnd(){
-	    	int row = 0;
-	    	int col = 0; 
-	    	try{
-	    	while(row<=8){
-	    	while(col<8){
-	    		if(board[row][col].type() == "pawn"){
-	    			getTakenArrays();
-	    			col++;
-	    			return board[row][col];
-	    		}
-	    		row+=7;
-	    		col++;
-	    	}
-	    	}
-	    	} catch(ArrayIndexOutOfBoundsException e){
-	    		return null;
-	    	}
-	    	catch(NullPointerException e){
-	    		return null;
-	    	}
-	    	return null;	
-	    }
-	    
-	 public void pawnSwap(){
-		 
-	 	IChessPiece thePawnAtTheEnd = pawnAtEnd();
-	   	ArrayList<IChessPiece> swapArray = getTakenArrays();
-    	thePawnAtTheEnd = swapArray.get(0);
+	 	 public boolean pawnAtEnd(){
+		int row = 0;
+		int col = 0;
+		try {
+			while (row < 8) {
+				while (col < 8) {
+					if (board[row][col].type() == "pawn") {
+						getTakenArrays();
+						col++;
+						return true;
+					}
+					row += 7;
+					col++;
+				}
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
+		} catch (NullPointerException e) {
+			return false;
+		}
+		return false;
+	}
+
+	public void pawnSwap(IChessPiece piece, int r, int c) {
+
+		board[r][c] = piece;
+
+	}
 
     }
 }
